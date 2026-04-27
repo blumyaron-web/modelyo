@@ -75,4 +75,4 @@ def assert_prices_ascending(prices: list[float]) -> None:
                 "before the DOM re-rendered."
             ).is_equal_to(sorted(prices))
 
-    logger.info("[sort_flow] Price ascending assertions passed ✓")
+    logger.info("[sort_flow] Price ascending assertions passed")

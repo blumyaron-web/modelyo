@@ -94,4 +94,4 @@ def assert_order_confirmed(header: str, expected_header: str) -> None:
                 "if this is intentional."
             ).is_equal_to(expected_header)
 
-    logger.info("[checkout_flow] Order confirmation assertions passed ✓")
+    logger.info("[checkout_flow] Order confirmation assertions passed")

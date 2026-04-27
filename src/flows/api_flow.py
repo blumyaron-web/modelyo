@@ -88,7 +88,7 @@ def assert_get_all_posts(response: Response) -> None:
                 f"got {first.get('body')!r}."
             ).is_instance_of(str).is_not_empty()
 
-    logger.info("[api_flow] GET /posts assertions passed ✓")
+    logger.info("[api_flow] GET /posts assertions passed")
 
 
 def assert_get_single_post(response: Response, expected_id: int) -> None:
@@ -116,7 +116,7 @@ def assert_get_single_post(response: Response, expected_id: int) -> None:
                 "The server may have returned a different resource."
             ).is_equal_to(expected_id)
 
-    logger.info("[api_flow] GET /posts/%d assertions passed ✓", expected_id)
+    logger.info("[api_flow] GET /posts/%d assertions passed", expected_id)
 
 
 def assert_not_found(response: Response, post_id: int) -> None:
@@ -136,7 +136,7 @@ def assert_not_found(response: Response, post_id: int) -> None:
                 "If it returned 200, the endpoint is not guarding against invalid ids."
             ).is_equal_to(404)
 
-    logger.info("[api_flow] 404 assertion for id %d passed ✓", post_id)
+    logger.info("[api_flow] 404 assertion for id %d passed", post_id)
 
 
 def assert_create_post(response: Response, payload: dict) -> None:
@@ -185,7 +185,7 @@ def assert_create_post(response: Response, payload: dict) -> None:
                 f"  Echoed : {data.get('body')!r}"
             ).is_equal_to(payload["body"])
 
-    logger.info("[api_flow] POST /posts assertions passed ✓")
+    logger.info("[api_flow] POST /posts assertions passed")
 
 
 def assert_update_post(response: Response, payload: dict, target_id: int) -> None:
@@ -227,7 +227,7 @@ def assert_update_post(response: Response, payload: dict, target_id: int) -> Non
                 f"  Echoed : {data.get('body')!r}"
             ).is_equal_to(payload["body"])
 
-    logger.info("[api_flow] PUT /posts/%d assertions passed ✓", target_id)
+    logger.info("[api_flow] PUT /posts/%d assertions passed", target_id)
 
 
 def assert_delete_post(response: Response) -> None:
@@ -255,4 +255,4 @@ def assert_delete_post(response: Response) -> None:
                     "JSONPlaceholder returns an empty object on simulated delete."
                 ).is_equal_to({})
 
-    logger.info("[api_flow] DELETE /posts assertions passed ✓")
+    logger.info("[api_flow] DELETE /posts assertions passed")

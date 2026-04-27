@@ -85,7 +85,7 @@ def assert_login_success(inventory: InventoryPage) -> None:
                 "the catalogue may be empty or the page did not fully load"
             ).is_greater_than(0)
 
-    logger.info("[login_flow] Login success assertions passed ✓")
+    logger.info("[login_flow] Login success assertions passed")
 
 
 def assert_login_error(login_page: LoginPage, expected_error: str) -> None:
@@ -114,4 +114,4 @@ def assert_login_error(login_page: LoginPage, expected_error: str) -> None:
                 "The app wording may have changed — update EXPECTED_ERROR if intentional."
             ).is_equal_to(expected_error)
 
-    logger.info("[login_flow] Login error assertions passed ✓")
+    logger.info("[login_flow] Login error assertions passed")

@@ -78,7 +78,7 @@ jobs:
         with:
           header: allure-report
           message: |
-            ## 🧪 Test Report — ${{ github.event.pull_request.head.sha && format('`{0}`', github.sha) || github.sha }}
+            ## Test Report -- ${{ github.event.pull_request.head.sha && format('`{0}`', github.sha) || github.sha }}
 
             | Metric | Value |
             |--------|-------|

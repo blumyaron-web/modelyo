@@ -60,7 +60,7 @@ def assert_cart_badge(inventory: InventoryPage, expected_count: int) -> None:
                 "The badge may not have updated or an 'Add to cart' click was missed."
             ).is_equal_to(expected_count)
 
-    logger.info("[cart_flow] Cart badge assertion passed ✓")
+    logger.info("[cart_flow] Cart badge assertion passed")
 
 
 def assert_cart_contents(cart: CartPage, expected_products: list[str]) -> None:
@@ -95,7 +95,7 @@ def assert_cart_contents(cart: CartPage, expected_products: list[str]) -> None:
                     "The price element selector or page structure may have changed."
                 ).starts_with("$")
 
-    logger.info("[cart_flow] Cart contents assertions passed ✓")
+    logger.info("[cart_flow] Cart contents assertions passed")
 
 
 def assert_badge_increments(inventory: InventoryPage, products: list[str]) -> None:
@@ -116,7 +116,7 @@ def assert_badge_increments(inventory: InventoryPage, products: list[str]) -> No
                     f"  Actual   : {actual}\n"
                     "The badge did not increment — the 'Add to cart' action may have failed."
                 ).is_equal_to(i)
-    logger.info("[cart_flow] Badge increment assertions passed ✓")
+    logger.info("[cart_flow] Badge increment assertions passed")
 
 
 def assert_badge_decrements(inventory: InventoryPage, products: list[str]) -> None:
@@ -151,4 +151,4 @@ def assert_badge_decrements(inventory: InventoryPage, products: list[str]) -> No
                         "Badge did not decrement — the 'Remove' action may have failed."
                     ).is_equal_to(expected)
 
-    logger.info("[cart_flow] Badge decrement assertions passed ✓")
+    logger.info("[cart_flow] Badge decrement assertions passed")

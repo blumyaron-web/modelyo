@@ -18,14 +18,14 @@ import sys
 from pathlib import Path
 
 
-# ── Emoji / colour helpers ────────────────────────────────────────────────────
+# ── Status helpers ────────────────────────────────────────────────────────────
 
 STATUS_ICON = {
-    "passed":  "✅",
-    "failed":  "❌",
-    "broken":  "🔶",
-    "skipped": "⏭️",
-    "unknown": "❔",
+    "passed":  "[PASS]",
+    "failed":  "[FAIL]",
+    "broken":  "[BROKEN]",
+    "skipped": "[SKIP]",
+    "unknown": "[?]",
 }
 STATUS_COLOUR = {
     "passed":  "#2ea44f",
@@ -36,7 +36,7 @@ STATUS_COLOUR = {
 }
 
 def icon(status: str) -> str:
-    return STATUS_ICON.get(status, "❔")
+    return STATUS_ICON.get(status, "[?]")
 
 def ms_to_human(ms: int | float) -> str:
     s = ms / 1000
@@ -102,7 +102,7 @@ def test_row_html(test: dict) -> str:
     msg      = (test.get("statusDetails") or {}).get("message", "")
     trace    = (test.get("statusDetails") or {}).get("trace", "")
     steps    = test.get("steps", [])
-    flaky    = "🔁 flaky &nbsp;" if test.get("flaky") else ""
+    flaky    = "[FLAKY] " if test.get("flaky") else ""
 
     # Steps sub-table
     steps_section = ""
@@ -157,7 +157,7 @@ def build_summary(
     overall    = summary.get("status", "unknown")
     suite_name = summary.get("name", "QA Automation Suite")
 
-    headline = "✅ All tests passed" if overall == "passed" else "❌ Some tests failed"
+    headline = "All tests passed" if overall == "passed" else "Some tests failed"
 
     # Stat badges
     badges = (
@@ -166,7 +166,7 @@ def build_summary(
         stat_badge("Total",   total,     "#0969da") +
         stat_badge("Flaky",   flaky_cnt, STATUS_COLOUR["broken"] if flaky_cnt else "#6e7781") +
         stat_badge("Retries", retries,   "#6e7781") +
-        stat_badge("⏱",       duration,  "#0969da")
+        stat_badge("Time",    duration,  "#0969da")
     )
 
     # Group tests
@@ -189,13 +189,13 @@ def build_summary(
         )
 
     links = (
-        f'<a href="{report_url}">📊 Latest report</a>'
+        f'<a href="{report_url}">Latest report</a>'
         f" &nbsp;|&nbsp; "
-        f'<a href="{report_url}#/graphs">📈 Trend graphs</a>'
+        f'<a href="{report_url}#/graphs">Trend graphs</a>'
         f" &nbsp;|&nbsp; "
-        f'<a href="{report_url}#/history">🕓 Per-test history</a>'
+        f'<a href="{report_url}#/history">Per-test history</a>'
         f" &nbsp;|&nbsp; "
-        f'<a href="{run_url}">📦 Download artifacts</a>'
+        f'<a href="{run_url}">Download artifacts</a>'
     )
 
     return f"""## {headline}
@@ -239,7 +239,7 @@ def main() -> None:
     if step_summary:
         with open(step_summary, "a", encoding="utf-8") as f:
             f.write(html)
-        print("✓ Job summary written.")
+        print("Job summary written.")
     else:
         # Local dev: just print it
         print(html)
