@@ -68,22 +68,19 @@ docker run --rm qa-tests pytest tests/api -n auto
 
 ### Allure 3 — live on GitHub Pages (always latest run)
 ```
-https://blumyaron-web.github.io/modelyo/
+https://blumyaron-web.github.io/modelyo/awesome/
 ```
 
 ### Allure 3 — generate locally
 ```bash
-# Generate (reads allurerc.mjs → outputs to reports/allure-report/)
-npx allure generate reports/allure-results
+# Generate full report (multi-file, works in browser from local filesystem)
+npx allure awesome reports/allure-results --output reports/allure-report --name "QA Automation Suite" --lang en
 
-# Open the Awesome report in your browser
-npx allure open reports/allure-report
+# Open locally
+open reports/allure-report/awesome/index.html
 
 # Live watch during a test run (updates in real time)
 npx allure watch reports/allure-results
-
-# Produce a portable single-file HTML (good for sharing)
-npx allure generate reports/allure-results --single-file
 ```
 
 ### pytest-html (offline, single file)
@@ -102,7 +99,7 @@ Artifacts written automatically to `test-artifacts/`:
 
 Latest green run: **<add Actions link after first push>**
 
-**Live Allure report (GitHub Pages):** https://blumyaron-web.github.io/modelyo/
+**Live Allure report (GitHub Pages):** https://blumyaron-web.github.io/modelyo/awesome/
 
 CI artifacts per run (downloadable from Actions):
 - `pytest-html-report` — self-contained HTML report

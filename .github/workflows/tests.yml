@@ -46,17 +46,6 @@ jobs:
       - name: Create output directories
         run: mkdir -p reports/allure-results logs test-artifacts
 
-      # ── Restore history so this run's report shows trend across all past runs ──
-      - name: Restore Allure history
-        if: always()
-        run: |
-          if [ -d gh-pages/history ]; then
-            cp -r gh-pages/history reports/allure-results/history
-            echo "✓ History restored from gh-pages"
-          else
-            echo "No previous history found — this will be run #1"
-          fi
-
       - name: Run API tests
         run: pytest tests/api -n auto --tb=short
 
@@ -69,28 +58,39 @@ jobs:
       # ── Generate Allure 3 report (reads allurerc.mjs) ─────────────────────────
       - name: Generate Allure 3 report
         if: always()
-        run: npx allure generate reports/allure-results
+        run: |
+          HISTORY_ARGS=""
+          if [ -f gh-pages/history.json ]; then
+            HISTORY_ARGS="--history-path gh-pages/history.json"
+          fi
+          npx allure awesome reports/allure-results \
+            --single-file \
+            --output reports/allure-report \
+            --name "QA Automation Suite" \
+            --lang en \
+            $HISTORY_ARGS
 
       # ── Write Job Summary (visible on every Actions run page) ─────────────────
       - name: Write Job Summary
         if: always()
         run: |
-          REPORT_URL="https://blumyaron-web.github.io/modelyo/"
+          REPORT_URL="https://blumyaron-web.github.io/modelyo/awesome/"
           RUN_URL="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
 
-          # Parse Allure summary.json for counts
+          # Allure 3 summary.json schema: .stats.{total,passed,retries}  .status  .flakyTests[]
           SUMMARY_JSON="reports/allure-report/summary.json"
           if [ -f "$SUMMARY_JSON" ]; then
-            PASSED=$(jq '.statistic.passed  // 0' "$SUMMARY_JSON")
-            FAILED=$(jq '.statistic.failed  // 0' "$SUMMARY_JSON")
-            BROKEN=$(jq '.statistic.broken  // 0' "$SUMMARY_JSON")
-            SKIPPED=$(jq '.statistic.skipped // 0' "$SUMMARY_JSON")
-            TOTAL=$(jq  '.statistic.total   // 0' "$SUMMARY_JSON")
+            TOTAL=$(jq  '.stats.total   // 0' "$SUMMARY_JSON")
+            PASSED=$(jq '.stats.passed  // 0' "$SUMMARY_JSON")
+            FAILED=$(jq '(.stats.total - .stats.passed) // 0' "$SUMMARY_JSON")
+            FLAKY=$(jq  '.flakyTests | length' "$SUMMARY_JSON")
+            RETRIES=$(jq '.stats.retries // 0' "$SUMMARY_JSON")
+            STATUS_VAL=$(jq -r '.status // "unknown"' "$SUMMARY_JSON")
           else
-            PASSED="-"; FAILED="-"; BROKEN="-"; SKIPPED="-"; TOTAL="-"
+            TOTAL="-"; PASSED="-"; FAILED="-"; FLAKY="-"; RETRIES="-"; STATUS_VAL="unknown"
           fi
 
-          if [ "$FAILED" = "0" ] && [ "$BROKEN" = "0" ]; then
+          if [ "$STATUS_VAL" = "passed" ]; then
             STATUS="✅ All tests passed"
           else
             STATUS="❌ Some tests failed"
@@ -99,9 +99,9 @@ jobs:
           cat >> $GITHUB_STEP_SUMMARY << EOF
           ## $STATUS
 
-          | Passed | Failed | Broken | Skipped | Total |
-          |:------:|:------:|:------:|:-------:|:-----:|
-          | $PASSED | $FAILED | $BROKEN | $SKIPPED | $TOTAL |
+          | Passed | Failed | Total | Flaky | Retries |
+          |:------:|:------:|:-----:|:-----:|:-------:|
+          | $PASSED | $FAILED | $TOTAL | $FLAKY | $RETRIES |
 
           🔗 [**Live Allure Report (GitHub Pages)**]($REPORT_URL)
           📦 [Download artifacts from this run]($RUN_URL)
@@ -122,7 +122,7 @@ jobs:
             | Branch | `${{ github.head_ref }}` |
             | Commit | `${{ github.sha }}` |
 
-            🔗 **[View full Allure report on GitHub Pages](https://blumyaron-web.github.io/modelyo/)**
+            🔗 **[View full Allure report on GitHub Pages](https://blumyaron-web.github.io/modelyo/awesome/)**
 
             > _Report updates automatically on each push to this PR._
 
@@ -133,7 +133,7 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_branch: gh-pages
-          publish_dir: reports/allure-report
+          publish_dir: reports/allure-report   # deploys index.html + all JS/CSS + awesome/ subdir
           keep_files: false
 
       # ── Upload artifacts for direct download from the Actions run ─────────────

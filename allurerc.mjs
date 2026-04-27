@@ -6,9 +6,8 @@ export default defineConfig({
   plugins: {
     awesome: {
       options: {
-        // singleFile is great for email/Slack sharing but breaks GitHub Pages navigation.
-        // Disabled here so gh-pages gets a full interactive report.
-        // To produce a portable single file locally: npx allure generate --single-file
+        // Note: singleFile must be passed as --single-file CLI flag to `allure awesome`
+        // It is NOT respected as a plugin config key. See workflow for usage.
         reportLanguage: "en",
       },
     },
