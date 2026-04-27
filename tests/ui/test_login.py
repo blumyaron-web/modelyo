@@ -6,7 +6,6 @@ Scenario 2: Invalid creds → error message matches the exact app text.
 from __future__ import annotations
 
 import pytest
-from playwright.sync_api import Page
 
 from config.config import cfg
 from flows.flows import Flows
