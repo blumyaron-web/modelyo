@@ -66,21 +66,29 @@ docker run --rm qa-tests pytest tests/api -n auto
 
 ## View reports
 
+### Allure 3 — live on GitHub Pages (always latest run)
+```
+https://blumyaron-web.github.io/modelyo/
+```
+
+### Allure 3 — generate locally
+```bash
+# Generate (reads allurerc.mjs → outputs to reports/allure-report/)
+npx allure generate reports/allure-results
+
+# Open the Awesome report in your browser
+npx allure open reports/allure-report
+
+# Live watch during a test run (updates in real time)
+npx allure watch reports/allure-results
+
+# Produce a portable single-file HTML (good for sharing)
+npx allure generate reports/allure-results --single-file
+```
+
 ### pytest-html (offline, single file)
 ```bash
 open reports/report.html
-```
-
-### Allure 3 — generate and open locally
-```bash
-# Generate (reads allurerc.mjs for config → outputs to reports/allure-report/)
-npx allure@latest generate reports/allure-results
-
-# Open the Awesome report in your browser
-npx allure@latest open reports/allure-report/awesome
-
-# Or: live watch during a test run (updates in real time)
-npx allure@latest watch reports/allure-results
 ```
 
 ## On failure
@@ -94,9 +102,11 @@ Artifacts written automatically to `test-artifacts/`:
 
 Latest green run: **<add Actions link after first push>**
 
+**Live Allure report (GitHub Pages):** https://blumyaron-web.github.io/modelyo/
+
 CI artifacts per run (downloadable from Actions):
 - `pytest-html-report` — self-contained HTML report
-- `allure-html-report` — Allure 3 Awesome report (`singleFile: true`, open `index.html`)
-- `allure-results` — raw JSON for trend history / re-generation
+- `allure-report` — full Allure 3 Awesome report (downloadable copy)
+- `allure-results` — raw JSON (useful for local re-generation or trend debugging)
 - `failure-artifacts` — screenshots + DOM + traces (only on failure)
 - `pytest-log` — full DEBUG log

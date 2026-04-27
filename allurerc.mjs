@@ -6,8 +6,9 @@ export default defineConfig({
   plugins: {
     awesome: {
       options: {
-        // Self-contained single file — easy to attach as CI artifact
-        singleFile: true,
+        // singleFile is great for email/Slack sharing but breaks GitHub Pages navigation.
+        // Disabled here so gh-pages gets a full interactive report.
+        // To produce a portable single file locally: npx allure generate --single-file
         reportLanguage: "en",
       },
     },

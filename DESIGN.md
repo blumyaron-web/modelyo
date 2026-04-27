@@ -33,7 +33,7 @@ If a test fails at 3am the on-call engineer opens the GitHub Actions run, downlo
 2. **DOM dump** (`<test-id>.html`) — inspect the exact page state, no browser needed.
 3. **Playwright trace** (`<test-id>.zip`) — open with `playwright show-trace` for a step-by-step timeline with network, console, and DOM snapshots.
 4. **pytest log** — structured DEBUG log covering every HTTP request/response and every page action.
-5. **Allure 3 Awesome report** — `allure-html-report` artifact; `singleFile: true` in `allurerc.mjs` means a single `index.html` — no web server needed, works offline, readable by non-engineers. The Awesome UI shows pass/fail per step, retry history, and links directly to the attached screenshot. At scale, the Allure trend chart surfaces regression introductions across builds with no extra tooling. Allure 3 (Node.js CLI, `npx allure`) replaces the Java-based Allure 2 — no JDK required in CI.
+5. **Allure 3 Awesome report on GitHub Pages** — published to `gh-pages` branch on every run via `peaceiris/actions-gh-pages`. Allure history is carried forward by checking out the previous `gh-pages` branch and copying its `history/` folder into the new `allure-results/` before generation — so trend charts and retry counts accumulate across every CI run without any external database. The live URL is always `https://blumyaron-web.github.io/modelyo/`. Allure 3 (Node.js CLI, `npx allure`) is used instead of the Java-based Allure 2 — no JDK in CI, just `npm ci`.
 
 The pytest-html report is self-contained (single file) and readable offline — useful for sharing with non-engineers.
 
