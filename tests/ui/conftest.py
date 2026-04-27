@@ -4,8 +4,8 @@ Defines the ``flows`` fixture for UI tests.  The fixture receives a page
 that is already authenticated (via ``logged_in_page``) so individual tests
 never have to repeat login steps.
 
-Login tests override this fixture at module level with an unauthenticated
-``page`` so they can exercise the login flow themselves.
+Tests that need an unauthenticated page should use the ``flows_unauthenticated``
+fixture defined in ``tests/fixtures/flows.py``.
 """
 from __future__ import annotations
 

@@ -20,27 +20,18 @@ pytestmark = [
 ]
 
 
-# ── Fixture override ──────────────────────────────────────────────────────
-# Login tests need an *unauthenticated* page so they can drive login themselves.
-# This module-level fixture shadows the ui/conftest.py ``flows`` fixture.
-@pytest.fixture()
-def flows(page: Page) -> Flows:
-    """Flows backed by a fresh, unauthenticated page for login testing."""
-    return Flows(page=page)
-
-
 # ── Tests ─────────────────────────────────────────────────────────────────
 
 class TestLogin:
     @pytest.mark.regression
-    def test_happy_path(self, flows: Flows, test_run_data: TestRunData) -> None:
+    def test_happy_path(self, flows_unauthenticated: Flows, test_run_data: TestRunData) -> None:
         """Scenario 1 — valid credentials land on a populated inventory page."""
-        flows.perform_login(username=cfg.STANDARD_USER, password=cfg.PASSWORD)
-        flows.assert_login_success()
+        flows_unauthenticated.perform_login(username=cfg.STANDARD_USER, password=cfg.PASSWORD)
+        flows_unauthenticated.assert_login_success()
 
     @pytest.mark.regression
     @pytest.mark.boundary
-    def test_invalid_credentials(self, flows: Flows, test_run_data: TestRunData) -> None:
+    def test_invalid_credentials(self, flows_unauthenticated: Flows, test_run_data: TestRunData) -> None:
         """Scenario 2 — wrong password surfaces the exact error string."""
-        flows.perform_failed_login(username=cfg.STANDARD_USER, password=test_run_data.login.wrong_password)
-        flows.assert_login_error(expected_error=test_run_data.login.invalid_credentials_error)
+        flows_unauthenticated.perform_failed_login(username=cfg.STANDARD_USER, password=test_run_data.login.wrong_password)
+        flows_unauthenticated.assert_login_error(expected_error=test_run_data.login.invalid_credentials_error)
