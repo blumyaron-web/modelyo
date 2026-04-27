@@ -77,23 +77,7 @@ jobs:
           touch reports/allure-report/.nojekyll
 
           # Root redirect → wherever the real index.html lives
-          if [ -f reports/allure-report/awesome/index.html ]; then
-            REPORT_SUBDIR="awesome"
-          else
-            REPORT_SUBDIR="."
-          fi
-
-          cat > reports/allure-report/index.html << HTML
-          <!DOCTYPE html>
-          <html>
-            <head>
-              <meta http-equiv="refresh" content="0; url=./${REPORT_SUBDIR}/index.html" />
-            </head>
-            <body>
-              <a href="./${REPORT_SUBDIR}/index.html">Open report</a>
-            </body>
-          </html>
-          HTML
+          python3 utils/write_redirect.py reports/allure-report
 
       # ── Write Job Summary (visible on every Actions run page) ─────────────────
       - name: Write Job Summary
