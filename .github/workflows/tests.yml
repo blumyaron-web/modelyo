@@ -20,7 +20,8 @@ jobs:
     timeout-minutes: 25
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
       # ── Load previous Allure history from gh-pages so trend charts accumulate ──
       - name: Load Allure history from gh-pages
@@ -31,7 +32,7 @@ jobs:
           ref: gh-pages
           path: gh-pages
 
-      - name: Set up Python
+      - name: Set up Python 3.12
         uses: actions/setup-python@v5
         with:
           python-version: "3.12"
@@ -43,7 +44,7 @@ jobs:
       - name: Install Node dependencies (Allure 3 CLI)
         run: npm ci
 
-      - name: Install Chromium
+      - name: Install Chromium browser
         run: playwright install chromium --with-deps
 
       - name: Create output directories
@@ -52,19 +53,19 @@ jobs:
       - name: Run API tests
         run: pytest tests/api -n auto --tb=short
 
-      - name: Run UI tests (2 parallel workers, auto-retry on flakes)
+      - name: Run UI tests
         env:
           HEADLESS: "true"
           ARTIFACT_DIR: test-artifacts
         run: pytest tests/ui -n 2 --tb=short
 
       # ── Generate Allure 3 report ──────────────────────────────────────────────
-      - name: Generate Allure 3 report
+      - name: Generate Allure report
         if: always()
         uses: ./.github/actions/allure-report
 
       # ── Write Job Summary (visible on every Actions run page) ─────────────────
-      - name: Write Job Summary
+      - name: Write job summary
         if: always()
         run: |
           python src/utils/generate_summary.py \
@@ -75,7 +76,7 @@ jobs:
             --sha       "${{ github.sha }}"
 
       # ── Sticky PR comment (updates on every push to the PR) ───────────────────
-      - name: Post Allure report link to PR
+      - name: Post report link as PR comment
         uses: marocchino/sticky-pull-request-comment@v2
         if: always() && github.event_name == 'pull_request'
         with:
@@ -98,7 +99,7 @@ jobs:
             > _Report updates automatically on each push to this PR._
 
       # ── Publish to GitHub Pages ───────────────────────────────────────────────
-      - name: Deploy Allure report to GitHub Pages
+      - name: Deploy report to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
         if: always()
         with:
