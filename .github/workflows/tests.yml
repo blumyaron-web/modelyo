@@ -6,9 +6,10 @@ on:
   pull_request:
     branches: [main]
 
-# Required for peaceiris/actions-gh-pages to push to the gh-pages branch
+# Required for gh-pages deploy and PR comments
 permissions:
   contents: write
+  pull-requests: write
 
 jobs:
   test:
@@ -70,7 +71,62 @@ jobs:
         if: always()
         run: npx allure generate reports/allure-results
 
-      # ── Publish to GitHub Pages (visible at https://<owner>.github.io/<repo>/) ─
+      # ── Write Job Summary (visible on every Actions run page) ─────────────────
+      - name: Write Job Summary
+        if: always()
+        run: |
+          REPORT_URL="https://blumyaron-web.github.io/modelyo/"
+          RUN_URL="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+
+          # Parse Allure summary.json for counts
+          SUMMARY_JSON="reports/allure-report/summary.json"
+          if [ -f "$SUMMARY_JSON" ]; then
+            PASSED=$(jq '.statistic.passed  // 0' "$SUMMARY_JSON")
+            FAILED=$(jq '.statistic.failed  // 0' "$SUMMARY_JSON")
+            BROKEN=$(jq '.statistic.broken  // 0' "$SUMMARY_JSON")
+            SKIPPED=$(jq '.statistic.skipped // 0' "$SUMMARY_JSON")
+            TOTAL=$(jq  '.statistic.total   // 0' "$SUMMARY_JSON")
+          else
+            PASSED="-"; FAILED="-"; BROKEN="-"; SKIPPED="-"; TOTAL="-"
+          fi
+
+          if [ "$FAILED" = "0" ] && [ "$BROKEN" = "0" ]; then
+            STATUS="✅ All tests passed"
+          else
+            STATUS="❌ Some tests failed"
+          fi
+
+          cat >> $GITHUB_STEP_SUMMARY << EOF
+          ## $STATUS
+
+          | Passed | Failed | Broken | Skipped | Total |
+          |:------:|:------:|:------:|:-------:|:-----:|
+          | $PASSED | $FAILED | $BROKEN | $SKIPPED | $TOTAL |
+
+          🔗 [**Live Allure Report (GitHub Pages)**]($REPORT_URL)
+          📦 [Download artifacts from this run]($RUN_URL)
+          EOF
+
+      # ── Sticky PR comment (updates on every push to the PR) ───────────────────
+      - name: Post Allure report link to PR
+        uses: marocchino/sticky-pull-request-comment@v2
+        if: always() && github.event_name == 'pull_request'
+        with:
+          header: allure-report
+          message: |
+            ## 🧪 Test Report — ${{ github.event.pull_request.head.sha && format('`{0}`', github.sha) || github.sha }}
+
+            | Metric | Value |
+            |--------|-------|
+            | Workflow run | [${{ github.run_id }}](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}) |
+            | Branch | `${{ github.head_ref }}` |
+            | Commit | `${{ github.sha }}` |
+
+            🔗 **[View full Allure report on GitHub Pages](https://blumyaron-web.github.io/modelyo/)**
+
+            > _Report updates automatically on each push to this PR._
+
+      # ── Publish to GitHub Pages ───────────────────────────────────────────────
       - name: Deploy Allure report to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
         if: always()
