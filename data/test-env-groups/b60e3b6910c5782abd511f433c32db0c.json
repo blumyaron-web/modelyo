@@ -1,0 +1,1 @@
+{"id":"b60e3b6910c5782abd511f433c32db0c","fullName":"tests.api.test_posts_crud.TestPostsCrud#test_update_post_returns_200_with_updated_body","name":"test_update_post_returns_200_with_updated_body","status":"passed","testResultsByEnv":{"default":"cdda2f69b33366ce2ae93fdd5877ca0c"}}

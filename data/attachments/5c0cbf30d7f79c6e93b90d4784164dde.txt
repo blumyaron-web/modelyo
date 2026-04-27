@@ -1,0 +1,11 @@
+DEBUG    asyncio:selector_events.py:64 Using selector: EpollSelector
+INFO     conftest:conftest.py:59 Browser launched: chromium  headless=True
+INFO     pages.base_page:base_page.py:33 Navigating to https://www.saucedemo.com/
+INFO     pages.login_page:login_page.py:22 Login page opened
+INFO     pages.login_page:login_page.py:26 Logging in as 'standard_user'
+INFO     pages.inventory_page:inventory_page.py:22 Inventory page loaded
+INFO     flows.sort_flow:sort_flow.py:36 [sort_flow] Applying sort 'lohi'
+INFO     pages.inventory_page:inventory_page.py:68 Sorting products by 'lohi'
+INFO     flows.sort_flow:sort_flow.py:45 [sort_flow] Collected 6 price(s): [7.99, 9.99, 15.99, 15.99, 29.99, 49.99]
+INFO     flows.sort_flow:sort_flow.py:58 [sort_flow] Asserting prices are in ascending order
+INFO     flows.sort_flow:sort_flow.py:78 [sort_flow] Price ascending assertions passed

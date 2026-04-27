@@ -1,0 +1,1 @@
+{"id":"f5d827a960029e98524a2b42a81b0418","fullName":"tests.api.test_posts_get.TestGetPosts#test_get_all_posts_returns_array_with_valid_schema","name":"test_get_all_posts_returns_array_with_valid_schema","status":"passed","testResultsByEnv":{"default":"6d20d4f35149a089cf493b5a5daf8e6a"}}

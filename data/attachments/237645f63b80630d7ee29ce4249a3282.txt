@@ -1,0 +1,19 @@
+DEBUG    asyncio:selector_events.py:64 Using selector: EpollSelector
+INFO     conftest:conftest.py:59 Browser launched: chromium  headless=True
+INFO     pages.base_page:base_page.py:33 Navigating to https://www.saucedemo.com/
+INFO     pages.login_page:login_page.py:22 Login page opened
+INFO     pages.login_page:login_page.py:26 Logging in as 'standard_user'
+INFO     pages.inventory_page:inventory_page.py:22 Inventory page loaded
+INFO     flows.cart_flow:cart_flow.py:29 [cart_flow] Adding 2 item(s) to cart: ['Sauce Labs Backpack', 'Sauce Labs Bike Light']
+INFO     pages.inventory_page:inventory_page.py:39 Adding item to cart: Sauce Labs Backpack (test-id: add-to-cart-sauce-labs-backpack)
+INFO     pages.inventory_page:inventory_page.py:39 Adding item to cart: Sauce Labs Bike Light (test-id: add-to-cart-sauce-labs-bike-light)
+INFO     flows.cart_flow:cart_flow.py:52 [cart_flow] Asserting cart badge count == 2
+INFO     flows.cart_flow:cart_flow.py:63 [cart_flow] Cart badge assertion passed
+INFO     flows.cart_flow:cart_flow.py:36 [cart_flow] Navigating to cart
+INFO     pages.inventory_page:inventory_page.py:61 Opening cart
+INFO     pages.cart_page:cart_page.py:26 Cart page loaded
+INFO     flows.cart_flow:cart_flow.py:40 [cart_flow] Cart page loaded
+INFO     flows.cart_flow:cart_flow.py:74 [cart_flow] Asserting cart contains: ['Sauce Labs Backpack', 'Sauce Labs Bike Light']
+DEBUG    pages.cart_page:cart_page.py:36 Cart item: name='Sauce Labs Backpack' price='$29.99'
+DEBUG    pages.cart_page:cart_page.py:36 Cart item: name='Sauce Labs Bike Light' price='$9.99'
+INFO     flows.cart_flow:cart_flow.py:98 [cart_flow] Cart contents assertions passed

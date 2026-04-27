@@ -1,0 +1,8 @@
+INFO     flows.login_flow:login_flow.py:51 [login_flow] Attempting failed login as 'standard_user'
+INFO     pages.base_page:base_page.py:33 Navigating to https://www.saucedemo.com/
+INFO     pages.login_page:login_page.py:22 Login page opened
+INFO     pages.login_page:login_page.py:26 Logging in as 'standard_user'
+INFO     flows.login_flow:login_flow.py:55 [login_flow] Credentials submitted — expecting error message
+INFO     flows.login_flow:login_flow.py:99 [login_flow] Asserting login error message
+DEBUG    pages.login_page:login_page.py:38 Error message text: 'Epic sadface: Username and password do not match any user in this service'
+INFO     flows.login_flow:login_flow.py:117 [login_flow] Login error assertions passed

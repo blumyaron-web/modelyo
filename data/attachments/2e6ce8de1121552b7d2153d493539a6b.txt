@@ -1,0 +1,27 @@
+INFO     clients.api_client:api_client.py:42 → POST https://jsonplaceholder.typicode.com/posts  kwargs={'json': {'userId': 42, 'title': 'automation test post', 'body': 'created by qa automation suite'}}
+DEBUG    httpcore.connection:_trace.py:47 connect_tcp.started host='jsonplaceholder.typicode.com' port=443 local_address=None timeout=10 socket_options=None
+DEBUG    httpcore.connection:_trace.py:47 connect_tcp.complete return_value=<httpcore._backends.sync.SyncStream object at 0x7fb342055a00>
+DEBUG    httpcore.connection:_trace.py:47 start_tls.started ssl_context=<ssl.SSLContext object at 0x7fb342038e50> server_hostname='jsonplaceholder.typicode.com' timeout=10
+DEBUG    httpcore.connection:_trace.py:47 start_tls.complete return_value=<httpcore._backends.sync.SyncStream object at 0x7fb3420558b0>
+DEBUG    httpcore.http11:_trace.py:47 send_request_headers.started request=<Request [b'POST']>
+DEBUG    httpcore.http11:_trace.py:47 send_request_headers.complete
+DEBUG    httpcore.http11:_trace.py:47 send_request_body.started request=<Request [b'POST']>
+DEBUG    httpcore.http11:_trace.py:47 send_request_body.complete
+DEBUG    httpcore.http11:_trace.py:47 receive_response_headers.started request=<Request [b'POST']>
+DEBUG    httpcore.http11:_trace.py:47 receive_response_headers.complete return_value=(b'HTTP/1.1', 201, b'Created', [(b'Date', b'Mon, 27 Apr 2026 23:06:11 GMT'), (b'Content-Type', b'application/json; charset=utf-8'), (b'Content-Length', b'110'), (b'Connection', b'keep-alive'), (b'access-control-allow-credentials', b'true'), (b'access-control-expose-headers', b'Location'), (b'Cache-Control', b'no-cache'), (b'etag', b'W/"6e-qAfPTxCZ82Wcyh5De3fzNSxh5m8"'), (b'expires', b'-1'), (b'location', b'https://jsonplaceholder.typicode.com/posts/101'), (b'nel', b'{"report_to":"heroku-nel","response_headers":["Via"],"max_age":3600,"success_fraction":0.01,"failure_fraction":0.1}'), (b'pragma', b'no-cache'), (b'report-to', b'{"group":"heroku-nel","endpoints":[{"url":"https://nel.heroku.com/reports?s=B797Sd5HQbcfQeOnsQmkVCYbooXYOE8uzGJ5anf1XPI%3D\\u0026sid=e11707d5-02a7-43ef-b45e-2cf4d2036f7d\\u0026ts=1777331171"}],"max_age":3600}'), (b'reporting-endpoints', b'heroku-nel="https://nel.heroku.com/reports?s=B797Sd5HQbcfQeOnsQmkVCYbooXYOE8uzGJ5anf1XPI%3D&sid=e11707d5-02a7-43ef-b45e-2cf4d2036f7d&ts=1777331171"'), (b'Server', b'cloudflare'), (b'vary', b'Origin, X-HTTP-Method-Override, Accept-Encoding'), (b'via', b'2.0 heroku-router'), (b'x-content-type-options', b'nosniff'), (b'x-powered-by', b'Express'), (b'x-ratelimit-limit', b'1000'), (b'x-ratelimit-remaining', b'998'), (b'x-ratelimit-reset', b'1777331206'), (b'cf-cache-status', b'DYNAMIC'), (b'CF-RAY', b'9f3179ed9a65d6d3-IAD'), (b'alt-svc', b'h3=":443"; ma=86400')])
+INFO     httpx:_client.py:1025 HTTP Request: POST https://jsonplaceholder.typicode.com/posts "HTTP/1.1 201 Created"
+DEBUG    httpcore.http11:_trace.py:47 receive_response_body.started request=<Request [b'POST']>
+DEBUG    httpcore.http11:_trace.py:47 receive_response_body.complete
+DEBUG    httpcore.http11:_trace.py:47 response_closed.started
+DEBUG    httpcore.http11:_trace.py:47 response_closed.complete
+INFO     clients.api_client:api_client.py:44 ← POST https://jsonplaceholder.typicode.com/posts  status=201  body_len=110
+DEBUG    clients.api_client:api_client.py:51 Response body: {
+  "userId": 42,
+  "title": "automation test post",
+  "body": "created by qa automation suite",
+  "id": 101
+}
+INFO     flows.api_flow:api_flow.py:150 [api_flow] Asserting POST /posts response
+INFO     flows.api_flow:api_flow.py:188 [api_flow] POST /posts assertions passed
+DEBUG    httpcore.connection:_trace.py:47 close.started
+DEBUG    httpcore.connection:_trace.py:47 close.complete

@@ -1,0 +1,14 @@
+INFO     pages.base_page:base_page.py:33 Navigating to https://www.saucedemo.com/
+INFO     pages.login_page:login_page.py:22 Login page opened
+INFO     pages.login_page:login_page.py:26 Logging in as 'standard_user'
+INFO     pages.inventory_page:inventory_page.py:22 Inventory page loaded
+INFO     flows.cart_flow:cart_flow.py:107 [cart_flow] Asserting badge increments for 3 product(s)
+INFO     pages.inventory_page:inventory_page.py:39 Adding item to cart: Sauce Labs Backpack (test-id: add-to-cart-sauce-labs-backpack)
+INFO     pages.inventory_page:inventory_page.py:39 Adding item to cart: Sauce Labs Bike Light (test-id: add-to-cart-sauce-labs-bike-light)
+INFO     pages.inventory_page:inventory_page.py:39 Adding item to cart: Sauce Labs Onesie (test-id: add-to-cart-sauce-labs-onesie)
+INFO     flows.cart_flow:cart_flow.py:119 [cart_flow] Badge increment assertions passed
+INFO     flows.cart_flow:cart_flow.py:131 [cart_flow] Asserting badge decrements for 3 product(s)
+INFO     pages.inventory_page:inventory_page.py:45 Removing item from cart: Sauce Labs Backpack
+INFO     pages.inventory_page:inventory_page.py:45 Removing item from cart: Sauce Labs Bike Light
+INFO     pages.inventory_page:inventory_page.py:45 Removing item from cart: Sauce Labs Onesie
+INFO     flows.cart_flow:cart_flow.py:154 [cart_flow] Badge decrement assertions passed

@@ -1,0 +1,22 @@
+INFO     clients.api_client:api_client.py:42 → GET https://jsonplaceholder.typicode.com/posts/99999  kwargs={}
+DEBUG    httpcore.connection:_trace.py:47 connect_tcp.started host='jsonplaceholder.typicode.com' port=443 local_address=None timeout=10 socket_options=None
+DEBUG    httpcore.connection:_trace.py:47 connect_tcp.complete return_value=<httpcore._backends.sync.SyncStream object at 0x7f8e09580bc0>
+DEBUG    httpcore.connection:_trace.py:47 start_tls.started ssl_context=<ssl.SSLContext object at 0x7f8e096a14d0> server_hostname='jsonplaceholder.typicode.com' timeout=10
+DEBUG    httpcore.connection:_trace.py:47 start_tls.complete return_value=<httpcore._backends.sync.SyncStream object at 0x7f8e09580b30>
+DEBUG    httpcore.http11:_trace.py:47 send_request_headers.started request=<Request [b'GET']>
+DEBUG    httpcore.http11:_trace.py:47 send_request_headers.complete
+DEBUG    httpcore.http11:_trace.py:47 send_request_body.started request=<Request [b'GET']>
+DEBUG    httpcore.http11:_trace.py:47 send_request_body.complete
+DEBUG    httpcore.http11:_trace.py:47 receive_response_headers.started request=<Request [b'GET']>
+DEBUG    httpcore.http11:_trace.py:47 receive_response_headers.complete return_value=(b'HTTP/1.1', 404, b'Not Found', [(b'Date', b'Mon, 27 Apr 2026 23:06:11 GMT'), (b'Content-Type', b'application/json; charset=utf-8'), (b'Content-Length', b'2'), (b'Connection', b'keep-alive'), (b'access-control-allow-credentials', b'true'), (b'Cache-Control', b'max-age=43200'), (b'etag', b'W/"2-vyGp6PvFo4RvsFtPoIWeCReyIC8"'), (b'expires', b'-1'), (b'nel', b'{"report_to":"heroku-nel","response_headers":["Via"],"max_age":3600,"success_fraction":0.01,"failure_fraction":0.1}'), (b'pragma', b'no-cache'), (b'report-to', b'{"group":"heroku-nel","endpoints":[{"url":"https://nel.heroku.com/reports?s=NZtoaF%2Fo%2B5yjDXcGJZKxl3GNNWTyft%2BYrBCPtLJzcCc%3D\\u0026sid=e11707d5-02a7-43ef-b45e-2cf4d2036f7d\\u0026ts=1777311694"}],"max_age":3600}'), (b'reporting-endpoints', b'heroku-nel="https://nel.heroku.com/reports?s=NZtoaF%2Fo%2B5yjDXcGJZKxl3GNNWTyft%2BYrBCPtLJzcCc%3D&sid=e11707d5-02a7-43ef-b45e-2cf4d2036f7d&ts=1777311694"'), (b'Server', b'cloudflare'), (b'vary', b'Origin, Accept-Encoding'), (b'via', b'2.0 heroku-router'), (b'x-content-type-options', b'nosniff'), (b'x-powered-by', b'Express'), (b'x-ratelimit-limit', b'1000'), (b'x-ratelimit-remaining', b'999'), (b'x-ratelimit-reset', b'1777311749'), (b'Age', b'19477'), (b'cf-cache-status', b'HIT'), (b'CF-RAY', b'9f3179edfe9739af-IAD'), (b'alt-svc', b'h3=":443"; ma=86400')])
+INFO     httpx:_client.py:1025 HTTP Request: GET https://jsonplaceholder.typicode.com/posts/99999 "HTTP/1.1 404 Not Found"
+DEBUG    httpcore.http11:_trace.py:47 receive_response_body.started request=<Request [b'GET']>
+DEBUG    httpcore.http11:_trace.py:47 receive_response_body.complete
+DEBUG    httpcore.http11:_trace.py:47 response_closed.started
+DEBUG    httpcore.http11:_trace.py:47 response_closed.complete
+INFO     clients.api_client:api_client.py:44 ← GET https://jsonplaceholder.typicode.com/posts/99999  status=404  body_len=2
+DEBUG    clients.api_client:api_client.py:51 Response body: {}
+INFO     flows.api_flow:api_flow.py:128 [api_flow] Asserting 404 for non-existent id 99999
+INFO     flows.api_flow:api_flow.py:139 [api_flow] 404 assertion for id 99999 passed
+DEBUG    httpcore.connection:_trace.py:47 close.started
+DEBUG    httpcore.connection:_trace.py:47 close.complete

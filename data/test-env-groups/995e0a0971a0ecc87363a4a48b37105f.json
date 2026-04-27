@@ -1,0 +1,1 @@
+{"id":"995e0a0971a0ecc87363a4a48b37105f","fullName":"tests.api.test_posts_crud.TestPostsCrud#test_create_post_returns_201_with_echoed_payload","name":"test_create_post_returns_201_with_echoed_payload","status":"passed","testResultsByEnv":{"default":"6b06f5993ec2b1cac4f6a47022071ec1"}}

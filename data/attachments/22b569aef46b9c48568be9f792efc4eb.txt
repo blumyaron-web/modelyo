@@ -1,0 +1,8 @@
+INFO     flows.login_flow:login_flow.py:34 [login_flow] Logging in as 'standard_user'
+INFO     pages.base_page:base_page.py:33 Navigating to https://www.saucedemo.com/
+INFO     pages.login_page:login_page.py:22 Login page opened
+INFO     pages.login_page:login_page.py:26 Logging in as 'standard_user'
+INFO     pages.inventory_page:inventory_page.py:22 Inventory page loaded
+INFO     flows.login_flow:login_flow.py:41 [login_flow] Login successful — inventory page loaded
+INFO     flows.login_flow:login_flow.py:71 [login_flow] Asserting successful login state
+INFO     flows.login_flow:login_flow.py:88 [login_flow] Login success assertions passed

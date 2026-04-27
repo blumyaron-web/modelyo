@@ -1,0 +1,22 @@
+INFO     clients.api_client:api_client.py:42 → DELETE https://jsonplaceholder.typicode.com/posts/1  kwargs={}
+DEBUG    httpcore.connection:_trace.py:47 connect_tcp.started host='jsonplaceholder.typicode.com' port=443 local_address=None timeout=10 socket_options=None
+DEBUG    httpcore.connection:_trace.py:47 connect_tcp.complete return_value=<httpcore._backends.sync.SyncStream object at 0x7f0967249970>
+DEBUG    httpcore.connection:_trace.py:47 start_tls.started ssl_context=<ssl.SSLContext object at 0x7f0967230c50> server_hostname='jsonplaceholder.typicode.com' timeout=10
+DEBUG    httpcore.connection:_trace.py:47 start_tls.complete return_value=<httpcore._backends.sync.SyncStream object at 0x7f09673e8800>
+DEBUG    httpcore.http11:_trace.py:47 send_request_headers.started request=<Request [b'DELETE']>
+DEBUG    httpcore.http11:_trace.py:47 send_request_headers.complete
+DEBUG    httpcore.http11:_trace.py:47 send_request_body.started request=<Request [b'DELETE']>
+DEBUG    httpcore.http11:_trace.py:47 send_request_body.complete
+DEBUG    httpcore.http11:_trace.py:47 receive_response_headers.started request=<Request [b'DELETE']>
+DEBUG    httpcore.http11:_trace.py:47 receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'Date', b'Mon, 27 Apr 2026 23:06:11 GMT'), (b'Content-Type', b'application/json; charset=utf-8'), (b'Content-Length', b'2'), (b'Connection', b'keep-alive'), (b'access-control-allow-credentials', b'true'), (b'Cache-Control', b'no-cache'), (b'etag', b'W/"2-vyGp6PvFo4RvsFtPoIWeCReyIC8"'), (b'expires', b'-1'), (b'nel', b'{"report_to":"heroku-nel","response_headers":["Via"],"max_age":3600,"success_fraction":0.01,"failure_fraction":0.1}'), (b'pragma', b'no-cache'), (b'report-to', b'{"group":"heroku-nel","endpoints":[{"url":"https://nel.heroku.com/reports?s=B797Sd5HQbcfQeOnsQmkVCYbooXYOE8uzGJ5anf1XPI%3D\\u0026sid=e11707d5-02a7-43ef-b45e-2cf4d2036f7d\\u0026ts=1777331171"}],"max_age":3600}'), (b'reporting-endpoints', b'heroku-nel="https://nel.heroku.com/reports?s=B797Sd5HQbcfQeOnsQmkVCYbooXYOE8uzGJ5anf1XPI%3D&sid=e11707d5-02a7-43ef-b45e-2cf4d2036f7d&ts=1777331171"'), (b'Server', b'cloudflare'), (b'vary', b'Origin, Accept-Encoding'), (b'via', b'2.0 heroku-router'), (b'x-content-type-options', b'nosniff'), (b'x-powered-by', b'Express'), (b'x-ratelimit-limit', b'1000'), (b'x-ratelimit-remaining', b'997'), (b'x-ratelimit-reset', b'1777331206'), (b'cf-cache-status', b'DYNAMIC'), (b'CF-RAY', b'9f3179ed9883d6a1-IAD'), (b'alt-svc', b'h3=":443"; ma=86400')])
+INFO     httpx:_client.py:1025 HTTP Request: DELETE https://jsonplaceholder.typicode.com/posts/1 "HTTP/1.1 200 OK"
+DEBUG    httpcore.http11:_trace.py:47 receive_response_body.started request=<Request [b'DELETE']>
+DEBUG    httpcore.http11:_trace.py:47 receive_response_body.complete
+DEBUG    httpcore.http11:_trace.py:47 response_closed.started
+DEBUG    httpcore.http11:_trace.py:47 response_closed.complete
+INFO     clients.api_client:api_client.py:44 ← DELETE https://jsonplaceholder.typicode.com/posts/1  status=200  body_len=2
+DEBUG    clients.api_client:api_client.py:51 Response body: {}
+INFO     flows.api_flow:api_flow.py:240 [api_flow] Asserting DELETE /posts response
+INFO     flows.api_flow:api_flow.py:258 [api_flow] DELETE /posts assertions passed
+DEBUG    httpcore.connection:_trace.py:47 close.started
+DEBUG    httpcore.connection:_trace.py:47 close.complete

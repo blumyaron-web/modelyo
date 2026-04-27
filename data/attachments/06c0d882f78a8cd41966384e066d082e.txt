@@ -1,0 +1,23 @@
+INFO     pages.base_page:base_page.py:33 Navigating to https://www.saucedemo.com/
+INFO     pages.login_page:login_page.py:22 Login page opened
+INFO     pages.login_page:login_page.py:26 Logging in as 'standard_user'
+INFO     pages.inventory_page:inventory_page.py:22 Inventory page loaded
+INFO     flows.cart_flow:cart_flow.py:29 [cart_flow] Adding 1 item(s) to cart: ['Sauce Labs Fleece Jacket']
+INFO     pages.inventory_page:inventory_page.py:39 Adding item to cart: Sauce Labs Fleece Jacket (test-id: add-to-cart-sauce-labs-fleece-jacket)
+INFO     flows.cart_flow:cart_flow.py:36 [cart_flow] Navigating to cart
+INFO     pages.inventory_page:inventory_page.py:61 Opening cart
+INFO     pages.cart_page:cart_page.py:26 Cart page loaded
+INFO     flows.cart_flow:cart_flow.py:40 [cart_flow] Cart page loaded
+INFO     flows.checkout_flow:checkout_flow.py:51 [checkout_flow] Starting checkout for Jane Doe
+INFO     pages.cart_page:cart_page.py:26 Cart page loaded
+INFO     pages.cart_page:cart_page.py:40 Clicking checkout button
+INFO     pages.checkout_page:checkout_page.py:20 Checkout step-one loaded
+INFO     pages.checkout_page:checkout_page.py:26 Filling checkout information
+INFO     pages.checkout_page:checkout_page.py:32 Clicking Continue
+INFO     pages.checkout_page:checkout_page.py:42 Checkout overview loaded
+INFO     pages.checkout_page:checkout_page.py:46 Clicking Finish
+INFO     pages.checkout_page:checkout_page.py:56 Order confirmation page loaded
+INFO     pages.checkout_page:checkout_page.py:61 Confirmation header: 'Thank you for your order!'
+INFO     flows.checkout_flow:checkout_flow.py:65 [checkout_flow] Order confirmation page reached — header: 'Thank you for your order!'
+INFO     flows.checkout_flow:checkout_flow.py:79 [checkout_flow] Asserting order confirmation header
+INFO     flows.checkout_flow:checkout_flow.py:97 [checkout_flow] Order confirmation assertions passed
