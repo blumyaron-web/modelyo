@@ -14,7 +14,7 @@ from __future__ import annotations
 import logging
 
 from assertpy import assert_that, soft_assertions
-from requests import Response
+from httpx import Response
 
 logger = logging.getLogger(__name__)
 

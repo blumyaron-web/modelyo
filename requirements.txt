@@ -7,3 +7,4 @@ allure-pytest>=2.13.5        # rich HTML report with steps/history/trends
 httpx>=0.27.0
 python-dotenv>=1.0.0
 assertpy>=1.1                 # fluent soft assertions with human-readable messages
+requests>=2.31.0
