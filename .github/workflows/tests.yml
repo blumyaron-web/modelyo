@@ -74,38 +74,12 @@ jobs:
       - name: Write Job Summary
         if: always()
         run: |
-          REPORT_URL="https://blumyaron-web.github.io/modelyo/awesome/"
-          RUN_URL="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
-
-          # Allure 3 summary.json schema: .stats.{total,passed,retries}  .status  .flakyTests[]
-          SUMMARY_JSON="reports/allure-report/summary.json"
-          if [ -f "$SUMMARY_JSON" ]; then
-            TOTAL=$(jq  '.stats.total   // 0' "$SUMMARY_JSON")
-            PASSED=$(jq '.stats.passed  // 0' "$SUMMARY_JSON")
-            FAILED=$(jq '(.stats.total - .stats.passed) // 0' "$SUMMARY_JSON")
-            FLAKY=$(jq  '.flakyTests | length' "$SUMMARY_JSON")
-            RETRIES=$(jq '.stats.retries // 0' "$SUMMARY_JSON")
-            STATUS_VAL=$(jq -r '.status // "unknown"' "$SUMMARY_JSON")
-          else
-            TOTAL="-"; PASSED="-"; FAILED="-"; FLAKY="-"; RETRIES="-"; STATUS_VAL="unknown"
-          fi
-
-          if [ "$STATUS_VAL" = "passed" ]; then
-            STATUS="✅ All tests passed"
-          else
-            STATUS="❌ Some tests failed"
-          fi
-
-          cat >> $GITHUB_STEP_SUMMARY << EOF
-          ## $STATUS
-
-          | Passed | Failed | Total | Flaky | Retries |
-          |:------:|:------:|:-----:|:-----:|:-------:|
-          | $PASSED | $FAILED | $TOTAL | $FLAKY | $RETRIES |
-
-          🔗 [**Live Allure Report (GitHub Pages)**]($REPORT_URL)
-          📦 [Download artifacts from this run]($RUN_URL)
-          EOF
+          python utils/generate_summary.py \
+            --results  reports/allure-results \
+            --summary  reports/allure-report/summary.json \
+            --report-url "https://blumyaron-web.github.io/modelyo/awesome/" \
+            --run-url   "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}" \
+            --sha       "${{ github.sha }}"
 
       # ── Sticky PR comment (updates on every push to the PR) ───────────────────
       - name: Post Allure report link to PR
