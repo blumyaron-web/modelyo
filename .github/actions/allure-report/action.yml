@@ -1,0 +1,72 @@
+name: Generate Allure 3 Report
+description: >
+  Restores history from gh-pages, runs `npx allure awesome`, verifies the
+  output, and adds .nojekyll so GitHub Pages serves Allure's assets correctly.
+
+inputs:
+  results-dir:
+    description: Path to the allure-results directory produced by pytest
+    required: false
+    default: reports/allure-results
+
+  output-dir:
+    description: Path where the finished report will be written
+    required: false
+    default: reports/allure-report
+
+  history-dir:
+    description: Path where the previous gh-pages history was checked out
+    required: false
+    default: gh-pages/history
+
+  report-name:
+    description: Display name shown in the Allure report header
+    required: false
+    default: QA Automation Suite
+
+  lang:
+    description: Report UI language
+    required: false
+    default: en
+
+runs:
+  using: composite
+  steps:
+    # ── 1. Restore history so Allure can build trend/graph data ───────────────
+    - name: Restore Allure history
+      shell: bash
+      run: |
+        if [ -d "${{ inputs.history-dir }}" ]; then
+          count=$(ls "${{ inputs.history-dir }}" | wc -l)
+          echo "Restoring ${count} history file(s) from ${{ inputs.history-dir }}"
+          cp -r "${{ inputs.history-dir }}" "${{ inputs.results-dir }}/history"
+        else
+          echo "No previous history found — this run will seed it"
+        fi
+
+    # ── 2. Generate the report ────────────────────────────────────────────────
+    - name: Run allure awesome
+      shell: bash
+      run: |
+        npx allure awesome "${{ inputs.results-dir }}" \
+          --output "${{ inputs.output-dir }}" \
+          --name   "${{ inputs.report-name }}" \
+          --lang   "${{ inputs.lang }}"
+
+    # ── 3. Verify output & suppress Jekyll ───────────────────────────────────
+    - name: Verify report output
+      shell: bash
+      run: |
+        if [ -d "${{ inputs.output-dir }}/history" ]; then
+          echo "✅ History directory present ($(ls ${{ inputs.output-dir }}/history | wc -l) file(s))"
+        else
+          echo "⚠️  WARNING: Allure did not generate a history/ directory"
+        fi
+
+        echo "── Data files ──"
+        find "${{ inputs.output-dir }}/data" -name "*.json" 2>/dev/null \
+          | head -30 \
+          || echo "No data/ directory found"
+
+        # Stop Jekyll from mangling Allure's _-prefixed JS/CSS assets
+        touch "${{ inputs.output-dir }}/.nojekyll"

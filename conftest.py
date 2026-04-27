@@ -35,6 +35,7 @@ from clients.api_client import APIClient
 from config.config import cfg
 from pages.inventory_page import InventoryPage
 from pages.login_page import LoginPage
+from tests.data.test_run_data import TestRunData
 
 logger = logging.getLogger(__name__)
 
@@ -96,6 +97,19 @@ def logged_in_page(page: Page) -> Page:
 def api_client() -> Generator[APIClient, None, None]:
     with APIClient() as client:
         yield client
+
+
+@pytest.fixture()
+def test_run_data() -> TestRunData:
+    """Injectable test-data object; access via domain namespaces.
+
+    Examples::
+
+        test_run_data.checkout.product
+        test_run_data.cart.products
+        test_run_data.posts.create_payload
+    """
+    return TestRunData()
 
 
 # ── Failure artifact hook ─────────────────────────────────────────────────

@@ -5,15 +5,9 @@ Scenario 3: Add ≥2 distinct products, verify badge count and cart contents (na
 from __future__ import annotations
 
 import pytest
-from playwright.sync_api import Page
 
-from flows.cart_flow import (
-    add_items_to_cart,
-    assert_cart_badge,
-    assert_cart_contents,
-    open_cart,
-)
-from pages.inventory_page import InventoryPage
+from flows.flows import Flows
+from tests.data.test_run_data import TestRunData
 
 pytestmark = [
     pytest.mark.ui,
@@ -22,21 +16,13 @@ pytestmark = [
     pytest.mark.regression,
 ]
 
-# Products chosen by their exact display name on Swag Labs
-PRODUCTS = [
-    "Sauce Labs Backpack",
-    "Sauce Labs Bike Light",
-]
-
 
 class TestCart:
     @pytest.mark.smoke
-    def test_add_two_items_and_verify_cart(self, logged_in_page: Page) -> None:
+    def test_add_two_items_and_verify_cart(self, flows: Flows, test_run_data: TestRunData) -> None:
         """Scenario 3 — badge count and cart contents match what was added."""
-        inventory = InventoryPage(logged_in_page)
+        flows.add_items_to_cart(test_run_data.cart.products)
+        flows.assert_cart_badge(expected_count=len(test_run_data.cart.products))
 
-        add_items_to_cart(inventory, PRODUCTS)
-        assert_cart_badge(inventory, expected_count=len(PRODUCTS))
-
-        cart = open_cart(logged_in_page, inventory)
-        assert_cart_contents(cart, expected_products=PRODUCTS)
+        flows.open_cart()
+        flows.assert_cart_contents(expected_products=test_run_data.cart.products)

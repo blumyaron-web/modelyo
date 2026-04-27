@@ -103,9 +103,9 @@ HEADLESS=false pytest tests/ui -n 1 --tb=long
 
 | View | URL |
 |---|---|
-| Latest report | https://blumyaron-web.github.io/modelyo/ |
-| Trend graphs | https://blumyaron-web.github.io/modelyo/#/graphs |
-| Per-test history | https://blumyaron-web.github.io/modelyo/#/history |
+| Latest report | https://blumyaron-web.github.io/modelyo/ | \
+| Trend graphs | https://blumyaron-web.github.io/modelyo/#/graphs | \
+| Per-test history | https://blumyaron-web.github.io/modelyo/#/history | \
 
 Published automatically on every CI run. History is carried forward by checking out the previous `gh-pages` branch and copying its `history/` folder into `allure-results/` before report generation — trend charts accumulate across every run without an external database.
 
