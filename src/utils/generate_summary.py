@@ -206,8 +206,6 @@ def _render_links(links: ReportLinks) -> str:
     return (
         f'<a href="{links.report_url}">Latest report</a>'
         f" &nbsp;|&nbsp; "
-        f'<a href="{links.report_url}#/history">Per-test history</a>'
-        f" &nbsp;|&nbsp; "
         f'<a href="{links.run_url}">Download artifacts</a>'
     )
 

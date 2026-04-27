@@ -92,8 +92,7 @@ jobs:
 
             | Report | Link |
             |--------|------|
-            | � Latest report | https://blumyaron-web.github.io/modelyo/ |
-            |  Per-test history | https://blumyaron-web.github.io/modelyo/#/history |
+            | 📋 Latest report | https://blumyaron-web.github.io/modelyo/ |
 
             > _Report updates automatically on each push to this PR._
 
