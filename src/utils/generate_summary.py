@@ -159,14 +159,11 @@ def build_summary(
 
     headline = "All tests passed" if overall == "passed" else "Some tests failed"
 
-    # Stat badges
+    # Stat table
     badges = (
-        stat_badge("Passed",  passed,    STATUS_COLOUR["passed"])  +
-        stat_badge("Failed",  failed,    STATUS_COLOUR["failed"] if failed else "#6e7781") +
-        stat_badge("Total",   total,     "#0969da") +
-        stat_badge("Flaky",   flaky_cnt, STATUS_COLOUR["broken"] if flaky_cnt else "#6e7781") +
-        stat_badge("Retries", retries,   "#6e7781") +
-        stat_badge("Time",    duration,  "#0969da")
+        f"| Passed | Failed | Total | Flaky | Retries | Time |\n"
+        f"|--------|--------|-------|-------|---------|------|\n"
+        f"| ✅ {passed} | {'❌' if failed else '✅'} {failed} | {total} | {'⚠️' if flaky_cnt else '✅'} {flaky_cnt} | {retries} | ⏱️ {duration} |"
     )
 
     # Group tests
