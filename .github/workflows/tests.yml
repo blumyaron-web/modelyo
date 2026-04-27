@@ -59,19 +59,22 @@ jobs:
       - name: Generate Allure 3 report
         if: always()
         run: |
-          HISTORY_ARGS=""
-          if [ -f gh-pages/history.json ]; then
-            HISTORY_ARGS="--history-path gh-pages/history.json"
+          # Inject previous history into results so trend charts accumulate
+          # Allure looks for a history/ dir inside allure-results
+          if [ -d gh-pages/history ]; then
+            echo "Restoring history from gh-pages/history/"
+            cp -r gh-pages/history reports/allure-results/history
+          else
+            echo "No previous history found (first run)"
           fi
+
           npx allure awesome reports/allure-results \
             --output reports/allure-report \
             --name "QA Automation Suite" \
-            --lang en \
-            $HISTORY_ARGS
+            --lang en
 
-          # Debug — show what was actually generated
           echo "=== Generated report structure ==="
-          find reports/allure-report -maxdepth 3 | head -40
+          find reports/allure-report -maxdepth 3 | head -60
 
           # Prevent Jekyll from mangling Allure's JS/CSS (files starting with _)
           touch reports/allure-report/.nojekyll
@@ -113,8 +116,8 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_branch: gh-pages
-          publish_dir: reports/allure-report   # deploys index.html + all JS/CSS + awesome/ subdir
-          keep_files: false
+          publish_dir: reports/allure-report
+          keep_files: false            # peaceiris handles history via the checkout above
           enable_jekyll: false
 
       # ── Upload artifacts for direct download from the Actions run ─────────────
