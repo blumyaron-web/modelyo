@@ -1,0 +1,86 @@
+name: Tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install Python dependencies
+        run: pip install -r requirements.txt
+
+      - name: Install Node dependencies (Allure 3 CLI)
+        run: npm ci
+
+      - name: Install Chromium
+        run: playwright install chromium --with-deps
+
+      - name: Create output directories
+        run: mkdir -p reports/allure-results logs test-artifacts
+
+      - name: Run API tests
+        run: pytest tests/api -n auto --tb=short
+
+      - name: Run UI tests (2 parallel workers, auto-retry on flakes)
+        env:
+          HEADLESS: "true"
+          ARTIFACT_DIR: test-artifacts
+        run: pytest tests/ui -n 2 --tb=short
+
+      - name: Generate Allure 3 HTML report
+        if: always()
+        run: npx allure generate reports/allure-results
+
+      - name: Upload pytest-html report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: pytest-html-report
+          path: reports/report.html
+          retention-days: 14
+
+      - name: Upload Allure HTML report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: allure-html-report
+          path: reports/allure-report/        # Allure 3 output dir (from allurerc.mjs)
+          retention-days: 14
+
+      - name: Upload Allure raw results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: allure-results
+          path: reports/allure-results/
+          retention-days: 14
+
+      - name: Upload failure artifacts (screenshots, DOM, traces)
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: failure-artifacts
+          path: test-artifacts/
+          retention-days: 14
+
+      - name: Upload pytest log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: pytest-log
+          path: logs/pytest.log
+          retention-days: 14
