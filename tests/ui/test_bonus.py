@@ -30,5 +30,5 @@ class TestCartBadge:
     @pytest.mark.cart
     def test_badge_increments_and_decrements(self, flows: Flows, test_run_data: TestRunData) -> None:
         """B2 — Badge count tracks add/remove operations accurately."""
-        flows.assert_badge_increments(test_run_data.cart.badge_cycle_products)
-        flows.assert_badge_decrements(test_run_data.cart.badge_cycle_products)
+        flows.assert_badge_increments(list(test_run_data.cart.badge_cycle_products))
+        flows.assert_badge_decrements(list(test_run_data.cart.badge_cycle_products))
