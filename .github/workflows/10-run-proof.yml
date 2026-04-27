@@ -5,7 +5,11 @@ on:
     branches: [main]
 
 permissions:
-  contents: read
+  contents: write
+
+concurrency:
+  group: gh-pages-deploy-proof
+  cancel-in-progress: true
 
 env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
@@ -19,6 +23,15 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v6
 
+      # ── Load previous Allure history from gh-pages so trend charts accumulate ──
+      - name: Load Allure history from gh-pages
+        uses: actions/checkout@v6
+        if: always()
+        continue-on-error: true
+        with:
+          ref: gh-pages
+          path: gh-pages
+
       - name: Set up Python 3.12
         uses: actions/setup-python@v6
         with:
@@ -28,8 +41,65 @@ jobs:
       - name: Install Python dependencies
         run: pip install -r requirements.txt
 
+      - name: Install Node dependencies (Allure 3 CLI)
+        run: npm ci
+
       - name: Create output directories
         run: mkdir -p reports/allure-results logs test-artifacts
 
       - name: Run API tests
         run: pytest tests/api -n auto --tb=short
+
+      # ── Generate Allure 3 report ──────────────────────────────────────────────
+      - name: Generate Allure report
+        if: always()
+        uses: ./.github/actions/allure-report
+
+      # ── Write Job Summary ─────────────────────────────────────────────────────
+      - name: Write job summary
+        if: always()
+        run: |
+          python src/utils/generate_summary.py \
+            --results  reports/allure-results \
+            --summary  reports/allure-report/summary.json \
+            --report-url "https://blumyaron-web.github.io/modelyo/" \
+            --run-url   "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}" \
+            --sha       "${{ github.sha }}"
+
+      # ── Publish to GitHub Pages ───────────────────────────────────────────────
+      - name: Deploy report to GitHub Pages
+        uses: JamesIves/github-pages-deploy-action@v4
+        if: always()
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          branch: gh-pages
+          folder: reports/allure-report
+          clean: true
+          git-config-name: github-actions[bot]
+          git-config-email: github-actions[bot]@users.noreply.github.com
+          single-commit: true
+
+      # ── Upload artifacts ──────────────────────────────────────────────────────
+      - name: Upload Allure report
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: allure-report
+          path: reports/allure-report/
+          retention-days: 14
+
+      - name: Upload Allure raw results
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: allure-results
+          path: reports/allure-results/
+          retention-days: 14
+
+      - name: Upload pytest log
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: pytest-log
+          path: logs/pytest.log
+          retention-days: 14
