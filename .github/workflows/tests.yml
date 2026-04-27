@@ -59,19 +59,28 @@ jobs:
       - name: Generate Allure 3 report
         if: always()
         run: |
-          # Inject previous history into results so trend charts accumulate
-          # Allure looks for a history/ dir inside allure-results
+          # ── Restore history so trend charts accumulate ──────────────────────
+          # Allure reads history/ from inside allure-results before generating.
           if [ -d gh-pages/history ]; then
-            echo "Restoring history from gh-pages/history/"
+            echo "Restoring history from gh-pages/history/ ($(ls gh-pages/history | wc -l) files)"
             cp -r gh-pages/history reports/allure-results/history
           else
-            echo "No previous history found (first run)"
+            echo "No previous history found — this run will seed it"
           fi
 
           npx allure awesome reports/allure-results \
             --output reports/allure-report \
             --name "QA Automation Suite" \
             --lang en
+
+          # ── Persist history into the report output for the next run ────────
+          # Allure 3 reads history from allure-results but does NOT write it
+          # to the output directory automatically. Without this copy, gh-pages
+          # never has a history/ folder and trends never accumulate.
+          if [ -d reports/allure-results/history ]; then
+            echo "Copying history to report output for gh-pages persistence"
+            cp -r reports/allure-results/history reports/allure-report/history
+          fi
 
           echo "=== Generated report structure ==="
           find reports/allure-report -maxdepth 3 | head -60
