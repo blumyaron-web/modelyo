@@ -83,7 +83,7 @@ jobs:
       - name: Write Job Summary
         if: always()
         run: |
-          python utils/generate_summary.py \
+          python src/utils/generate_summary.py \
             --results  reports/allure-results \
             --summary  reports/allure-report/summary.json \
             --report-url "https://blumyaron-web.github.io/modelyo/" \
