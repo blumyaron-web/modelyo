@@ -76,9 +76,6 @@ jobs:
           # Prevent Jekyll from mangling Allure's JS/CSS (files starting with _)
           touch reports/allure-report/.nojekyll
 
-          # Root redirect → wherever the real index.html lives
-          python3 utils/write_redirect.py reports/allure-report
-
       # ── Write Job Summary (visible on every Actions run page) ─────────────────
       - name: Write Job Summary
         if: always()
