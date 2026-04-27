@@ -64,11 +64,36 @@ jobs:
             HISTORY_ARGS="--history-path gh-pages/history.json"
           fi
           npx allure awesome reports/allure-results \
-            --single-file \
             --output reports/allure-report \
             --name "QA Automation Suite" \
             --lang en \
             $HISTORY_ARGS
+
+          # Debug — show what was actually generated
+          echo "=== Generated report structure ==="
+          find reports/allure-report -maxdepth 3 | head -40
+
+          # Prevent Jekyll from mangling Allure's JS/CSS (files starting with _)
+          touch reports/allure-report/.nojekyll
+
+          # Root redirect → wherever the real index.html lives
+          if [ -f reports/allure-report/awesome/index.html ]; then
+            REPORT_SUBDIR="awesome"
+          else
+            REPORT_SUBDIR="."
+          fi
+
+          cat > reports/allure-report/index.html << HTML
+          <!DOCTYPE html>
+          <html>
+            <head>
+              <meta http-equiv="refresh" content="0; url=./${REPORT_SUBDIR}/index.html" />
+            </head>
+            <body>
+              <a href="./${REPORT_SUBDIR}/index.html">Open report</a>
+            </body>
+          </html>
+          HTML
 
       # ── Write Job Summary (visible on every Actions run page) ─────────────────
       - name: Write Job Summary
@@ -77,7 +102,7 @@ jobs:
           python utils/generate_summary.py \
             --results  reports/allure-results \
             --summary  reports/allure-report/summary.json \
-            --report-url "https://blumyaron-web.github.io/modelyo/awesome/" \
+            --report-url "https://blumyaron-web.github.io/modelyo/" \
             --run-url   "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}" \
             --sha       "${{ github.sha }}"
 
@@ -96,7 +121,7 @@ jobs:
             | Branch | `${{ github.head_ref }}` |
             | Commit | `${{ github.sha }}` |
 
-            🔗 **[View full Allure report on GitHub Pages](https://blumyaron-web.github.io/modelyo/awesome/)**
+            🔗 **[View full Allure report on GitHub Pages](https://blumyaron-web.github.io/modelyo/)**
 
             > _Report updates automatically on each push to this PR._
 
@@ -109,6 +134,7 @@ jobs:
           publish_branch: gh-pages
           publish_dir: reports/allure-report   # deploys index.html + all JS/CSS + awesome/ subdir
           keep_files: false
+          enable_jekyll: false
 
       # ── Upload artifacts for direct download from the Actions run ─────────────
       - name: Upload pytest-html report
