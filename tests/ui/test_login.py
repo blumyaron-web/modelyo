@@ -20,8 +20,6 @@ pytestmark = [
 ]
 
 
-# ── Tests ─────────────────────────────────────────────────────────────────
-
 class TestLogin:
     @pytest.mark.regression
     def test_happy_path(self, flows_unauthenticated: Flows, test_run_data: TestRunData) -> None:
