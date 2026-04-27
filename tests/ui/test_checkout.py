@@ -7,45 +7,34 @@ from __future__ import annotations
 import pytest
 from playwright.sync_api import Page
 
-from pages.cart_page import CartPage
-from pages.checkout_page import (
-    CheckoutCompletePage,
-    CheckoutOverviewPage,
-    CheckoutStepOnePage,
-)
+from flows.cart_flow import add_items_to_cart, open_cart
+from flows.checkout_flow import assert_order_confirmed, complete_checkout
 from pages.inventory_page import InventoryPage
+
+pytestmark = [
+    pytest.mark.ui,
+    pytest.mark.playwright,
+    pytest.mark.checkout,
+    pytest.mark.e2e,
+    pytest.mark.smoke,
+]
 
 PRODUCT = "Sauce Labs Fleece Jacket"
 EXPECTED_CONFIRMATION_HEADER = "Thank you for your order!"
 
 
 class TestCheckout:
+    @pytest.mark.regression
     def test_end_to_end_checkout(self, logged_in_page: Page) -> None:
-        """Scenario 4 — full checkout flow lands on order-complete page."""
-        # 1. Add product
+        """Scenario 4 — full checkout flow lands on the order-complete page."""
         inventory = InventoryPage(logged_in_page)
-        inventory.add_item_to_cart_by_name(PRODUCT)
+        add_items_to_cart(inventory, [PRODUCT])
+        open_cart(logged_in_page, inventory)
 
-        # 2. Go to cart
-        inventory.go_to_cart()
-        CartPage(logged_in_page).wait_for_cart().proceed_to_checkout()
-
-        # 3. Your Information
-        step_one = CheckoutStepOnePage(logged_in_page)
-        step_one.wait_for_step_one()
-        step_one.fill_information(first_name="Jane", last_name="Doe", postal_code="10001")
-        step_one.continue_to_overview()
-
-        # 4. Overview
-        CheckoutOverviewPage(logged_in_page).wait_for_overview().finish()
-
-        # 5. Confirmation
-        complete = CheckoutCompletePage(logged_in_page)
-        complete.wait_for_confirmation()
-        header = complete.confirmation_header()
-
-        assert header == EXPECTED_CONFIRMATION_HEADER, (
-            f"Confirmation header changed!\n"
-            f"  Expected : {EXPECTED_CONFIRMATION_HEADER!r}\n"
-            f"  Got      : {header!r}"
+        header = complete_checkout(
+            logged_in_page,
+            first_name="Jane",
+            last_name="Doe",
+            postal_code="10001",
         )
+        assert_order_confirmed(header, expected_header=EXPECTED_CONFIRMATION_HEADER)

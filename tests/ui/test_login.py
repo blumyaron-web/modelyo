@@ -1,7 +1,7 @@
 """
 UI — Login tests
-Scenario 1: Happy path  → lands on inventory page, items visible
-Scenario 2: Invalid creds → error message matches the exact app text
+Scenario 1: Happy path  → lands on inventory page, items visible.
+Scenario 2: Invalid creds → error message matches the exact app text.
 """
 from __future__ import annotations
 
@@ -9,38 +9,34 @@ import pytest
 from playwright.sync_api import Page
 
 from config.config import cfg
-from pages.inventory_page import InventoryPage
-from pages.login_page import LoginPage
+from flows.login_flow import (
+    assert_login_error,
+    assert_login_success,
+    perform_failed_login,
+    perform_login,
+)
+
+pytestmark = [
+    pytest.mark.ui,
+    pytest.mark.playwright,
+    pytest.mark.authentication,
+    pytest.mark.smoke,
+]
 
 # The exact wording the app renders — test fails loudly if it changes.
 EXPECTED_ERROR = "Epic sadface: Username and password do not match any user in this service"
 
 
 class TestLogin:
+    @pytest.mark.regression
     def test_happy_path(self, page: Page) -> None:
-        """Scenario 1 — valid credentials land on the inventory page."""
-        login = LoginPage(page)
-        login.open()
-        login.login(cfg.STANDARD_USER, cfg.PASSWORD)
+        """Scenario 1 — valid credentials land on a populated inventory page."""
+        inventory = perform_login(page, username=cfg.STANDARD_USER, password=cfg.PASSWORD)
+        assert_login_success(inventory)
 
-        inventory = InventoryPage(page)
-        inventory.wait_for_inventory()
-
-        assert inventory.is_loaded(), "Inventory container should be visible after login"
-        items = inventory.inventory_items()
-        assert len(items) > 0, "At least one inventory item should be present"
-
+    @pytest.mark.regression
+    @pytest.mark.boundary
     def test_invalid_credentials(self, page: Page) -> None:
-        """Scenario 2 — wrong password shows the exact error string."""
-        login = LoginPage(page)
-        login.open()
-        login.login(cfg.STANDARD_USER, "wrong_password_xyz")
-
-        error_text = login.error_message()
-
-        # Exact-match assertion: the test description says "fail loudly if wording changes"
-        assert error_text == EXPECTED_ERROR, (
-            f"Error message changed!\n"
-            f"  Expected : {EXPECTED_ERROR!r}\n"
-            f"  Got      : {error_text!r}"
-        )
+        """Scenario 2 — wrong password surfaces the exact error string."""
+        login = perform_failed_login(page, username=cfg.STANDARD_USER, password="wrong_password_xyz")
+        assert_login_error(login, expected_error=EXPECTED_ERROR)

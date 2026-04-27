@@ -9,11 +9,21 @@ from __future__ import annotations
 import pytest
 
 from clients.api_client import APIClient
+from flows.api_flow import assert_create_post, assert_delete_post, assert_update_post
+
+pytestmark = [
+    pytest.mark.api,
+    pytest.mark.rest,
+    pytest.mark.posts,
+    pytest.mark.crud,
+]
 
 TARGET_POST_ID = 1
 
 
 class TestPostsCrud:
+    @pytest.mark.smoke
+    @pytest.mark.regression
     def test_create_post_returns_201_with_echoed_payload(
         self, api_client: APIClient
     ) -> None:
@@ -24,15 +34,9 @@ class TestPostsCrud:
             "body": "created by qa automation suite",
         }
         response = api_client.post("/posts", json=payload)
+        assert_create_post(response, payload=payload)
 
-        assert response.status_code == 201, f"Expected 201, got {response.status_code}"
-
-        data = response.json()
-        assert "id" in data and isinstance(data["id"], int), "Response must include a generated int id"
-        assert data["userId"] == payload["userId"], "userId should be echoed back"
-        assert data["title"] == payload["title"], "title should be echoed back"
-        assert data["body"] == payload["body"], "body should be echoed back"
-
+    @pytest.mark.regression
     def test_update_post_returns_200_with_updated_body(
         self, api_client: APIClient
     ) -> None:
@@ -44,21 +48,10 @@ class TestPostsCrud:
             "body": "updated body content",
         }
         response = api_client.put(f"/posts/{TARGET_POST_ID}", json=payload)
+        assert_update_post(response, payload=payload, target_id=TARGET_POST_ID)
 
-        assert response.status_code == 200, f"Expected 200, got {response.status_code}"
-
-        data = response.json()
-        assert data["id"] == TARGET_POST_ID
-        assert data["title"] == payload["title"], "PUT should return the updated title"
-        assert data["body"] == payload["body"], "PUT should return the updated body"
-
+    @pytest.mark.regression
     def test_delete_post_returns_success(self, api_client: APIClient) -> None:
         """Scenario 4b — DELETE /posts/{id} → 200 or 204."""
         response = api_client.delete(f"/posts/{TARGET_POST_ID}")
-
-        assert response.status_code in (200, 204), (
-            f"Expected 200 or 204, got {response.status_code}"
-        )
-        # For 200, body should be an empty object {}
-        if response.status_code == 200:
-            assert response.json() == {}, "DELETE 200 body should be an empty object"
+        assert_delete_post(response)
