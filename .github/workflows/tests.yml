@@ -59,31 +59,42 @@ jobs:
       - name: Generate Allure 3 report
         if: always()
         run: |
-          # ── Restore history so trend charts accumulate ──────────────────────
-          # Allure reads history/ from inside allure-results before generating.
+          # ── Step 1: Restore previous history so Allure can build trend data ─
+          # Allure reads history/ from allure-results/, merges it with the
+          # current run, and writes UPDATED history/ into the report output.
+          # If gh-pages/history/ doesn't exist yet (first run), Allure seeds it.
           if [ -d gh-pages/history ]; then
-            echo "Restoring history from gh-pages/history/ ($(ls gh-pages/history | wc -l) files)"
+            echo "Restoring history: $(ls gh-pages/history | wc -l) file(s) from gh-pages"
             cp -r gh-pages/history reports/allure-results/history
           else
-            echo "No previous history found — this run will seed it"
+            echo "No previous history on gh-pages — this run will seed it"
           fi
 
+          # ── Step 2: Generate the report ────────────────────────────────────
+          # Allure reads  : reports/allure-results/ (results + history/)
+          # Allure writes : reports/allure-report/  (HTML + data/ + history/)
+          # graphs.json and per-test history are produced here automatically.
           npx allure awesome reports/allure-results \
             --output reports/allure-report \
             --name "QA Automation Suite" \
             --lang en
 
-          # ── Persist history into the report output for the next run ────────
-          # Allure 3 reads history from allure-results but does NOT write it
-          # to the output directory automatically. Without this copy, gh-pages
-          # never has a history/ folder and trends never accumulate.
-          if [ -d reports/allure-results/history ]; then
-            echo "Copying history to report output for gh-pages persistence"
-            cp -r reports/allure-results/history reports/allure-report/history
+          # ── Step 3: Verify Allure wrote history and graph data ─────────────
+          # Allure 3 writes updated history/ into the report output directory.
+          # We must NOT overwrite it — deploying allure-report/ as-is preserves
+          # the freshly generated trend/history files for the next run.
+          echo "=== History in report output (seeded to gh-pages next) ==="
+          if [ -d reports/allure-report/history ]; then
+            ls -lh reports/allure-report/history/
+          else
+            echo "WARNING: Allure did not generate a history/ directory"
           fi
 
-          echo "=== Generated report structure ==="
-          find reports/allure-report -maxdepth 3 | head -60
+          echo "=== Graph / trend data files ==="
+          find reports/allure-report/data -name "*.json" 2>/dev/null | head -30 || echo "No data/ directory found"
+
+          echo "=== Full report structure (depth 4) ==="
+          find reports/allure-report -maxdepth 4 | sort | head -80
 
           # Prevent Jekyll from mangling Allure's JS/CSS (files starting with _)
           touch reports/allure-report/.nojekyll
