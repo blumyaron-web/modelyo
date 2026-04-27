@@ -191,8 +191,6 @@ def build_summary(
     links = (
         f'<a href="{report_url}">Latest report</a>'
         f" &nbsp;|&nbsp; "
-        f'<a href="{report_url}#/graphs">Trend graphs</a>'
-        f" &nbsp;|&nbsp; "
         f'<a href="{report_url}#/history">Per-test history</a>'
         f" &nbsp;|&nbsp; "
         f'<a href="{run_url}">Download artifacts</a>'

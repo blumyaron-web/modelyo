@@ -93,8 +93,7 @@ jobs:
             | Report | Link |
             |--------|------|
             | � Latest report | https://blumyaron-web.github.io/modelyo/ |
-            | 📈 Trend graphs | https://blumyaron-web.github.io/modelyo/#/graphs |
-            | 🕓 Per-test history | https://blumyaron-web.github.io/modelyo/#/history |
+            |  Per-test history | https://blumyaron-web.github.io/modelyo/#/history |
 
             > _Report updates automatically on each push to this PR._
 
