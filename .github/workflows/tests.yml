@@ -100,14 +100,15 @@ jobs:
 
       # ── Publish to GitHub Pages ───────────────────────────────────────────────
       - name: Deploy report to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v4
+        uses: JamesIves/github-pages-deploy-action@v4
         if: always()
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_branch: gh-pages
-          publish_dir: reports/allure-report
-          keep_files: false            # peaceiris handles history via the checkout above
-          enable_jekyll: false
+          token: ${{ secrets.GITHUB_TOKEN }}
+          branch: gh-pages
+          folder: reports/allure-report
+          clean: true
+          git-config-name: github-actions[bot]
+          git-config-email: github-actions[bot]@users.noreply.github.com
 
       # ── Upload artifacts for direct download from the Actions run ─────────────
       - name: Upload pytest-html report
